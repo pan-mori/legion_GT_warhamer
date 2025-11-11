@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Legion GT – Herní mapy. Přehled všech 5 herních map pro WTC turnaj 2025.">
+    <title>Legion GT – Herní mapy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PPMori', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #0a0e27;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Hexagon pattern background from PDF */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 10% 50%, rgba(12, 114, 237, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 90% 50%, rgba(63, 139, 242, 0.15) 0%, transparent 50%),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 35px,
+                    rgba(12, 114, 237, 0.08) 35px,
+                    rgba(12, 114, 237, 0.08) 70px
+                ),
+                repeating-linear-gradient(
+                    60deg,
+                    transparent,
+                    transparent 35px,
+                    rgba(12, 114, 237, 0.08) 35px,
+                    rgba(12, 114, 237, 0.08) 70px
+                ),
+                repeating-linear-gradient(
+                    120deg,
+                    transparent,
+                    transparent 35px,
+                    rgba(12, 114, 237, 0.08) 35px,
+                    rgba(12, 114, 237, 0.08) 70px
+                );
+            background-attachment: fixed;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sticky Navigation */
+        .sticky-nav {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.9) 0%, rgba(26, 26, 46, 0.9) 100%);
+            padding: 15px;
+            border-radius: 0;
+            border: 2px solid #0c72ed;
+            box-shadow: 0 10px 40px rgba(12, 114, 237, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            max-width: 300px;
+        }
+
+        .sticky-nav span {
+            color: #63acf7;
+            font-weight: bold;
+            font-size: 0.9em;
+            width: 100%;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(99, 172, 247, 0.3);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #0c72ed;
+            background: linear-gradient(135deg, #0c72ed 0%, #0858f7 100%);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            box-shadow: 0 4px 12px rgba(12, 114, 237, 0.3);
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: linear-gradient(135deg, #0858f7 0%, #0740df 100%);
+            border-color: #63acf7;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(12, 114, 237, 0.5);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #63acf7 0%, #3f8bf2 100%);
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(99, 172, 247, 0.6);
+        }
+
+        header {
+            color: #b0b0d0;
+            padding: 20px 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
+            pointer-events: none;
+        }
+
+        .header-logo {
+            top: -8px;
+            max-width: 145px;
+            height: auto;
+            position: absolute;
+            z-index: 3;
+            display: block;
+        }
+
+        header h1 {
+            font-family: 'ESBuild', sans-serif;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(12, 114, 237, 0.5);
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 3;
+        }
+
+        header h2 {
+            font-family: 'ESBuild', sans-serif;
+            font-size: 1.5em;
+            color: #63acf7;
+            margin: 10px 0 5px 0;
+            position: relative;
+            z-index: 3;
+            text-shadow: 0 0 10px rgba(99, 172, 247, 0.2);
+            font-weight: bold;
+        }
+
+        header .header-desc {
+            font-size: 0.85em;
+            color: #7880a0;
+            opacity: 0.8;
+            max-width: 700px;
+            margin: 5px auto 0;
+            position: relative;
+            z-index: 3;
+            text-shadow: none;
+        }
+
+        header p {
+            font-size: 0.95em;
+            color: #9090b0;
+            opacity: 1;
+            position: relative;
+            z-index: 3;
+            text-shadow: none;
+            margin: 5px 0;
+        }
+
+        .header-nav {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            z-index: 4;
+        }
+
+        .header-nav a {
+            color: #63acf7;
+            border: 2px solid #63acf7;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-size: 2em;
+            box-shadow: 0 4px 12px rgba(99, 172, 247, 0.2);
+        }
+
+        .header-nav a:hover {
+            background-color: rgba(99, 172, 247, 0.1);
+            box-shadow: 0 6px 16px rgba(99, 172, 247, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .map-section {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.85) 0%, rgba(22, 33, 62, 0.85) 100%);
+            margin: 40px 0;
+            padding: 40px;
+            border-radius: 0;
+            border: 2px solid #0c72ed;
+            box-shadow: 0 8px 32px rgba(12, 114, 237, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            scroll-margin-top: 80px;
+        }
+
+        .map-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.05) 25%,
+                rgba(255, 255, 255, 0.05) 50%,
+                transparent 75%,
+                transparent 100%);
+            pointer-events: none;
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .map-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .map-number {
+            font-family: 'ESBuild', sans-serif;
+            font-size: 3.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #0c72ed 0%, #63acf7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(12, 114, 237, 0.4);
+            min-width: 100px;
+        }
+
+        .map-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .map-title h2 {
+            font-family: 'ESBuild', sans-serif;
+            font-size: 2em;
+            background: linear-gradient(135deg, #3f8bf2 0%, #0c72ed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .map-subtitle {
+            font-size: 1.1em;
+            color: #a0a0c0;
+            font-style: italic;
+        }
+
+        .map-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .map-content h3 {
+            color: #63acf7;
+            font-size: 1.4em;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 8px rgba(99, 172, 247, 0.3);
+        }
+
+        .map-content p {
+            color: #b0b0d0;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .map-image {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            margin: 30px 0;
+            border: 2px solid #0c72ed;
+            border-radius: 0;
+            box-shadow: 0 10px 40px rgba(12, 114, 237, 0.3);
+            display: block;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .map-image:hover {
+            box-shadow: 0 15px 50px rgba(12, 114, 237, 0.5);
+            transform: scale(1.01);
+        }
+
+        .map-image-container {
+            position: relative;
+            z-index: 2;
+            margin: 30px 0;
+        }
+
+        .map-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, rgba(12, 114, 237, 0.15) 0%, rgba(8, 88, 247, 0.08) 100%);
+            padding: 20px;
+            border: 1px solid rgba(12, 114, 237, 0.3);
+            border-radius: 0;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .info-card h4 {
+            color: #63acf7;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .info-card p {
+            color: #9090b0;
+            font-size: 0.95em;
+            margin-bottom: 0;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(12, 114, 237, 0.2) 0%, rgba(8, 88, 247, 0.1) 100%);
+            border-left: 4px solid #0c72ed;
+            border-right: 1px solid rgba(12, 114, 237, 0.3);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 2px;
+            position: relative;
+            z-index: 2;
+            box-shadow: inset 0 1px 3px rgba(12, 114, 237, 0.1);
+        }
+
+        .highlights-list {
+            list-style: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        .highlights-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #b0b0d0;
+            border-bottom: 1px solid rgba(12, 114, 237, 0.1);
+        }
+
+        .highlights-list li:last-child {
+            border-bottom: none;
+        }
+
+        .highlights-list li:before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #0c72ed;
+            font-weight: bold;
+            font-size: 1.3em;
+            text-shadow: 0 0 5px rgba(12, 114, 237, 0.5);
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #0c72ed 50%, transparent 100%);
+            margin: 40px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        footer {
+            background: linear-gradient(135deg, rgba(5, 4, 25, 0.95) 0%, rgba(10, 14, 39, 0.95) 100%);
+            color: #b0b0d0;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-top: 3px solid #0c72ed;
+            box-shadow: 0 -10px 30px rgba(12, 114, 237, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        footer p {
+            margin: 10px 0;
+        }
+
+        footer strong {
+            color: #63acf7;
+            text-shadow: 0 0 10px rgba(99, 172, 247, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .map-section {
+                padding: 25px;
+            }
+
+            .map-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .map-number {
+                font-size: 2.5em;
+            }
+
+            .map-title h2 {
+                font-size: 1.5em;
+            }
+
+            .sticky-nav {
+                bottom: 15px;
+                right: 15px;
+                max-width: 250px;
+            }
+
+            .nav-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <header>
+            <div class="header-nav">
+                <a href="info-dark.html">📋 Info</a>
+            </div>
+            <img src="images/logos/logo.png" alt="Legion GT Logo" class="header-logo">
+            
+        </header>
+
+        <div class="container">
+            <!-- MAPA 1 -->
+            <section class="map-section" id="mapa1">
+                <div class="map-header">
+                    <div class="map-number">1</div>
+                    <div class="map-title">
+                        <h2>HAMMER AND ANVIL - 3</h2>
+                        <p class="map-subtitle">TAKE AND HOLD</p>
+                    </div>
+                </div>
+
+                <div class="map-content">
+                    <div class="map-image-container">
+                        <img src="images/maps/map-1.png" alt="Mapa 1: Hammer and Anvil - Take and Hold" class="map-image">
+                        <p style="text-align: center; color: #63acf7; font-weight: bold; margin-top: 10px; font-size: 1.1em;">MAP 1</p>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h4 style="margin-bottom: 15px; color: #63acf7;">TAKE AND HOLD</h4>
+                        <h5 style="color: #a0a0c0; margin-top: 15px; margin-bottom: 10px;">SECOND BATTLE ROUND ONWARDS</h5>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 10px;"><strong>WHEN:</strong> End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).</p>
+                        <p style="color: #9090b0; font-size: 0.95em;">The player whose turn it is scores <strong>5VP</strong> for each objective marker they control (up to <strong>15VP per turn</strong>).</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <!-- MAPA 2 -->
+            <section class="map-section" id="mapa2">
+                <div class="map-header">
+                    <div class="map-number">2</div>
+                    <div class="map-title">
+                        <h2>CRUCIBLE OF BATTLE - 3</h2>
+                        <p class="map-subtitle">PURGE THE FOE</p>
+                    </div>
+                </div>
+
+                <div class="map-content">
+                    <div class="map-image-container">
+                        <img src="images/maps/map-2.png" alt="Mapa 2: Crucible of Battle - Purge the Foe" class="map-image">
+                        <p style="text-align: center; color: #63acf7; font-weight: bold; margin-top: 10px; font-size: 1.1em;">MAP 2</p>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h4 style="margin-bottom: 15px; color: #63acf7;">PURGE THE FOE</h4>
+                        
+                        <h5 style="color: #a0a0c0; margin-top: 15px; margin-bottom: 10px;">ANY BATTLE ROUND</h5>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 10px;"><strong>WHEN:</strong> End of the battle round.</p>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 15px;">Each player scores <strong>4VP</strong> if one or more enemy units were destroyed this battle round.</p>
+
+                        <h5 style="color: #a0a0c0; margin-top: 15px; margin-bottom: 10px;">SECOND BATTLE ROUND ONWARDS</h5>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 10px;"><strong>WHEN:</strong> End of the battle round.</p>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 15px;">Each player scores <strong>4VP</strong> if more enemy units than friendly units were destroyed this battle round.</p>
+
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 10px;"><strong>WHEN:</strong> End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).</p>
+                        <p style="color: #9090b0; font-size: 0.95em;">The player whose turn it is scores <strong>4VP</strong> if they control one or more objective markers, and an additional <strong>4VP</strong> if they control more objective markers than their opponent controls.</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <!-- MAPA 3 -->
+            <section class="map-section" id="mapa3">
+                <div class="map-header">
+                    <div class="map-number">3</div>
+                    <div class="map-title">
+                        <h2>SEARCH AND DESTROY - 3</h2>
+                        <p class="map-subtitle">LINCHPIN</p>
+                    </div>
+                </div>
+
+                <div class="map-content">
+                    <div class="map-image-container">
+                        <img src="images/maps/map-3.png" alt="Mapa 3: Search and Destroy - Linchpin" class="map-image">
+                        <p style="text-align: center; color: #63acf7; font-weight: bold; margin-top: 10px; font-size: 1.1em;">MAP 3</p>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h4 style="margin-bottom: 15px; color: #63acf7;">LINCHPIN</h4>
+                      
+                        <h5 style="color: #a0a0c0; margin-top: 15px; margin-bottom: 10px;">SECOND BATTLE ROUND ONWARDS</h5>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 10px;"><strong>WHEN:</strong> End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).</p>
+
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 15px;"><strong>If the player whose turn it is does not control the objective marker in their deployment zone:</strong> they score <strong>3VP</strong> for each objective marker they control.</p>
+
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 15px; text-align: center;"><strong>OR</strong></p>
+
+                        <p style="color: #9090b0; font-size: 0.95em;"><strong>If the player whose turn it is controls the objective marker in their deployment zone:</strong> they score <strong>3VP</strong> for controlling that objective marker, and <strong>5VP</strong> for each other objective marker they control (up to <strong>15VP per turn</strong>).</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <!-- MAPA 4 -->
+            <section class="map-section" id="mapa4">
+                <div class="map-header">
+                    <div class="map-number">4</div>
+                    <div class="map-title">
+                        <h2>TIPPING POINT - 3</h2>
+                        <p class="map-subtitle">SCORCHED EARTH</p>
+                    </div>
+                </div>
+
+                <div class="map-content">
+                    <div class="map-image-container">
+                        <img src="images/maps/map-4.png" alt="Mapa 4: Tipping Point - Scorched Earth" class="map-image">
+                        <p style="text-align: center; color: #63acf7; font-weight: bold; margin-top: 10px; font-size: 1.1em;">MAP 4</p>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h4 style="margin-bottom: 15px; color: #63acf7;">SCORCHED EARTH</h4>
+                     
+                        <h5 style="color: #a0a0c0; margin-top: 15px; margin-bottom: 10px;">BURN OBJECTIVE (ACTION)</h5>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 10px;"><strong>STARTS:</strong> Your Shooting phase, from the second battle round onwards.</p>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 10px;"><strong>UNITS:</strong> One unit from your army within range of an objective marker that is not within your deployment zone.</p>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 10px;"><strong>COMPLETES:</strong> End of your opponent's next turn or the end of the battle (whichever comes first), if your unit is still within range of the same objective marker and you control that objective marker.</p>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 15px;"><strong>IF COMPLETED:</strong> That objective marker is burned and removed from the battlefield.</p>
+
+                        <h5 style="color: #a0a0c0; margin-top: 15px; margin-bottom: 10px;">SECOND BATTLE ROUND ONWARDS</h5>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 10px;"><strong>WHEN:</strong> Any time.</p>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 15px;">Each time a player burns an objective marker, that player scores <strong>5VP</strong> if that objective marker was in No Man's Land, or <strong>10VP</strong> instead if that objective marker was in their opponent's deployment zone.</p>
+
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 10px;"><strong>WHEN:</strong> End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).</p>
+                        <p style="color: #9090b0; font-size: 0.95em;">The player whose turn it is scores <strong>5VP</strong> for each objective marker they control (up to <strong>10VP per turn</strong>).</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <!-- MAPA 5 -->
+            <section class="map-section" id="mapa5">
+                <div class="map-header">
+                    <div class="map-number">5</div>
+                    <div class="map-title">
+                        <h2>HAMMER AND ANVIL - 4</h2>
+                        <p class="map-subtitle">HIDDEN SUPPLIES</p>
+                    </div>
+                </div>
+
+                <div class="map-content">
+                    <div class="map-image-container">
+                        <img src="images/maps/map-5.png" alt="Mapa 5: Hammer and Anvil - Hidden Supplies" class="map-image">
+                        <p style="text-align: center; color: #63acf7; font-weight: bold; margin-top: 10px; font-size: 1.1em;">MAP 5</p>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h4 style="margin-bottom: 15px; color: #63acf7;">HIDDEN SUPPLIES</h4>
+                      
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 15px;">In the Place Objective Markers step, players must set up one additional objective marker in No Man's Land.</p>
+
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 15px;">Before setting up this new objective marker, players must first move the objective marker in the centre of the battlefield 6" directly towards one of the corners of the battlefield (if No Man's Land touches any of the corners of the battlefield, you must move the objective marker towards one of those corners). Otherwise, the players roll off, and the winner selects which corner the objective marker is moved towards. Players then set up the new objective marker 6" from the centre of the battlefield towards the diagonally opposite corner of the battlefield to the previously moved objective marker.</p>
+
+                        <h5 style="color: #a0a0c0; margin-top: 15px; margin-bottom: 10px;">SECOND BATTLE ROUND ONWARDS</h5>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 10px;"><strong>WHEN:</strong> End of the Command phase (or the end of your turn if it is the fifth battle round and you are going second).</p>
+                        <p style="color: #9090b0; font-size: 0.95em; margin-bottom: 10px;">The player whose turn it is scores VP as follows (these are cumulative):</p>
+                        <ul style="color: #9090b0; font-size: 0.95em; margin-left: 20px; margin-bottom: 0;">
+                            <li><strong>5VP</strong> If they control one objective marker not within their deployment zone.</li>
+                            <li><strong>5VP</strong> If they control two objective markers not within their deployment zone.</li>
+                            <li><strong>5VP</strong> if they control more objective markers than their opponent controls.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p><strong>Herní mapy Legion GT – WTC 2025</strong></p>
+            <p>© 2025 Legion GT. Všechna práva vyhrazena.</p>
+        </footer>
+    </div>
+
+    <!-- Sticky Navigation -->
+    <div class="sticky-nav">
+        <span>Přejít na mapu:</span>
+        <div class="nav-buttons">
+            <a href="#mapa1" class="nav-btn">1</a>
+            <a href="#mapa2" class="nav-btn">2</a>
+            <a href="#mapa3" class="nav-btn">3</a>
+            <a href="#mapa4" class="nav-btn">4</a>
+            <a href="#mapa5" class="nav-btn">5</a>
+        </div>
+    </div>
+
+    <script>
+        // Highlight active map button on scroll
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const mapSections = document.querySelectorAll('.map-section');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            mapSections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('href') === '#' + current) {
+                    btn.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

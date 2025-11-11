@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Legion GT – Prestižní Warhammer 40K turnaj v Liberci. Připojte se k elitě Warhammer 40K komunity na třídenním Grand Tournament v Liberci.">
+    <title>Legion GT – Prestižní Warhammer 40K turnaj v Liberci</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PPMori', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Warhammer 40K grimdark pattern overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.03) 2px,
+                    rgba(255, 255, 255, 0.03) 4px
+                ),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.02) 2px,
+                    rgba(255, 255, 255, 0.02) 4px
+                );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.7) 0%, rgba(22, 33, 62, 0.7) 100%);
+            color: #b0b0d0;
+            padding: 20px 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            border-bottom: 1px solid rgba(12, 114, 237, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
+            pointer-events: none;
+        }
+
+        .header-logo {
+            max-width: 200px;
+            height: auto;
+            position: relative;
+            z-index: 3;
+            display: block;
+        }
+
+        header h1 {
+            font-family: 'ESBuild', sans-serif;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(12, 114, 237, 0.5);
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 3;
+        }
+
+        header h2 {
+            font-family: 'ESBuild', sans-serif;
+            font-size: 1.5em;
+            color: #63acf7;
+            margin: 10px 0 5px 0;
+            position: relative;
+            z-index: 3;
+            text-shadow: 0 0 10px rgba(99, 172, 247, 0.2);
+            font-weight: bold;
+        }
+
+        header .header-desc {
+            font-size: 0.85em;
+            color: #7880a0;
+            opacity: 0.8;
+            max-width: 700px;
+            margin: 5px auto 0;
+            position: relative;
+            z-index: 3;
+            text-shadow: none;
+        }
+
+        .header-nav {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            z-index: 4;
+        }
+
+        .header-nav a {
+            color: #63acf7;
+            text-decoration: none;
+            font-size: 2em;
+            padding: 8px 16px;
+            border: 1px solid rgba(99, 172, 247, 0.3);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .header-nav a:hover {
+            color: #ffffff;
+            border-color: #63acf7;
+            background: rgba(99, 172, 247, 0.1);
+        }
+
+        header p {
+            font-size: 0.95em;
+            color: #9090b0;
+            opacity: 1;
+            max-width: 900px;
+            margin: 5px auto;
+            position: relative;
+            z-index: 3;
+            text-shadow: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        section {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.85) 0%, rgba(22, 33, 62, 0.85) 100%);
+            margin: 30px 0;
+            padding: 40px;
+            border-radius: 0;
+            border: 2px solid #0c72ed;
+            box-shadow: 0 8px 32px rgba(12, 114, 237, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Metallic effect background for sections */
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.05) 25%,
+                rgba(255, 255, 255, 0.05) 50%,
+                transparent 75%,
+                transparent 100%);
+            pointer-events: none;
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        section h2 {
+            font-family: 'ESBuild', sans-serif;
+            background: linear-gradient(135deg, #3f8bf2 0%, #0c72ed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #0c72ed;
+            padding-bottom: 15px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 20px rgba(12, 114, 237, 0.3);
+        }
+
+        section h3 {
+            font-family: 'ESBuild', sans-serif;
+            color: #63acf7;
+            font-size: 1.5em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 8px rgba(99, 172, 247, 0.3);
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, rgba(12, 114, 237, 0.2) 0%, rgba(8, 88, 247, 0.1) 100%);
+            border-left: 4px solid #0c72ed;
+            border-right: 1px solid rgba(12, 114, 237, 0.3);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 2px;
+            position: relative;
+            z-index: 2;
+            box-shadow: inset 0 1px 3px rgba(12, 114, 237, 0.1);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(12, 114, 237, 0.15) 0%, rgba(8, 88, 247, 0.08) 100%);
+            padding: 25px;
+            border-radius: 0;
+            border: 2px solid rgba(12, 114, 237, 0.5);
+            box-shadow: 0 8px 20px rgba(12, 114, 237, 0.15),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #63acf7, transparent);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: #63acf7;
+            box-shadow: 0 15px 40px rgba(12, 114, 237, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(12, 114, 237, 0.25) 0%, rgba(8, 88, 247, 0.15) 100%);
+        }
+
+        .card h4 {
+            background: linear-gradient(135deg, #63acf7 0%, #3f8bf2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .card p {
+            color: #b0b0d0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline {
+            margin: 30px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin: 25px 0;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, #0c72ed 0%, #3f8bf2 100%);
+            border-radius: 0;
+            border: 3px solid rgba(10, 14, 39, 0.8);
+            box-shadow: 0 0 0 3px #0c72ed, 0 0 15px rgba(12, 114, 237, 0.5);
+        }
+
+        .timeline-item:not(:last-child):after {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 25px;
+            width: 2px;
+            height: calc(100% + 45px);
+            background: linear-gradient(180deg, #0c72ed 0%, rgba(12, 114, 237, 0.3) 100%);
+            box-shadow: 0 0 10px rgba(12, 114, 237, 0.3);
+        }
+
+        .timeline-content h4 {
+            background: linear-gradient(135deg, #63acf7 0%, #3f8bf2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .timeline-content p {
+            color: #a0a0c0;
+            margin-bottom: 5px;
+        }
+
+        .rules-list {
+            list-style: none;
+            margin: 20px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .rules-list li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #b0b0d0;
+            border-bottom: 1px solid rgba(12, 114, 237, 0.1);
+        }
+
+        .rules-list li:last-child {
+            border-bottom: none;
+        }
+
+        .rules-list li:before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #0c72ed;
+            font-weight: bold;
+            font-size: 1.3em;
+            text-shadow: 0 0 5px rgba(12, 114, 237, 0.5);
+        }
+
+        .prices-section {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.85) 0%, rgba(22, 33, 62, 0.85) 100%);
+            border: 2px solid #2c8c2c;
+        }
+
+        .prices-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, #2c8c2c 0%, transparent 100%);
+        }
+
+        .contact-box {
+            background: linear-gradient(135deg, rgba(8, 88, 247, 0.15) 0%, rgba(12, 114, 237, 0.08) 100%);
+            border-left: 4px solid #0858f7;
+            border-right: 1px solid rgba(12, 114, 237, 0.3);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 2px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(8, 88, 247, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .contact-box p {
+            margin: 10px 0;
+            color: #b0b0d0;
+        }
+
+        .contact-box a {
+            color: #63acf7;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(99, 172, 247, 0.3);
+        }
+
+        .contact-box a:hover {
+            color: #3f8bf2;
+            text-shadow: 0 0 15px rgba(99, 172, 247, 0.6);
+        }
+
+        footer {
+            background: linear-gradient(135deg, rgba(5, 4, 25, 0.95) 0%, rgba(10, 14, 39, 0.95) 100%);
+            color: #b0b0d0;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-top: 3px solid #0c72ed;
+            box-shadow: 0 -10px 30px rgba(12, 114, 237, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        footer p {
+            margin: 10px 0;
+        }
+
+        footer strong {
+            color: #63acf7;
+            text-shadow: 0 0 10px rgba(99, 172, 247, 0.3);
+        }
+
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #0c72ed 0%, #0858f7 100%);
+            color: white;
+            padding: 14px 35px;
+            border-radius: 0;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            border: 2px solid #0c72ed;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1em;
+            box-shadow: 0 8px 20px rgba(12, 114, 237, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(12, 114, 237, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border-color: #63acf7;
+            background: linear-gradient(135deg, #0858f7 0%, #0740df 100%);
+        }
+
+        .button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(12, 114, 237, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .warning {
+            background: linear-gradient(135deg, rgba(255, 106, 10, 0.15) 0%, rgba(255, 80, 0, 0.08) 100%);
+            border-left: 4px solid #ff6a0a;
+            border-right: 1px solid rgba(255, 106, 10, 0.2);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 2px;
+            color: #ffb84d;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(255, 106, 10, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        /* Grimdark aesthetic text */
+        section > p, .card p, .timeline-content p {
+            color: #a0a0c0;
+        }
+
+        section h3 ~ p {
+            color: #a0a0c0;
+        }
+
+        /* Decorative corner elements */
+        section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, transparent 0%, rgba(12, 114, 237, 0.08) 100%);
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            header p {
+                font-size: 1em;
+            }
+
+            section {
+                padding: 20px;
+            }
+
+            section h2 {
+                font-size: 1.5em;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button {
+                width: 100%;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <header>
+            <div class="header-nav">
+                <a href="game-maps.html">🗺️ Mapy</a>
+            </div>
+            <img src="images/logos/logo.png" alt="Legion GT Logo" class="header-logo">
+            <h2>Prestižní Warhammer 40K turnaj v Liberci</h2>
+            <p class="header-desc">
+                Připojte se k elitě Warhammer 40K komunity na třídenním Grand Tournament v Liberci.
+                Profesionální organizace, skvělá atmosféra a hodnotné ceny čekají na všechny účastníky!
+            </p>
+        </header>
+
+        <div class="container">
+            <!-- Obecné informace -->
+            <section>
+                <h2>📍 Obecné informace</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h4>⚔️ Místo konání</h4>
+                        <p>Kulturní centrum Liberec</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;">
+                            Prostory nabízejí dostatek místa pro všechny účastníky, kvalitní osvětlení a občerstvení.
+                        </p>
+                    </div>
+                    <div class="card">
+                        <h4>🎮 Formát</h4>
+                        <p>3-denní Grand Tournament (3 kola denně)</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;">
+                            Turnaj se hraje podle oficiálního WTC rules packu 2025.
+                        </p>
+                    </div>
+                    <div class="card">
+                        <h4>👥 Kapacita</h4>
+                        <p>Omezena na 60 hráčů</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;">
+                            Registrace probíhá online dva měsíce před konáním.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Harmonogram -->
+            <section>
+                <h2>🕐 Harmonogram turnaje</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>Den 1: 9:00 - 19:00</h4>
+                            <p>První tři kola turnaje s přestávkou na oběd</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>Den 2 & 3: 9:00 - 16:00</h4>
+                            <p>Zbývající kola turnaje</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>Zahájení: 8:30 - 9:00</h4>
+                            <p>Zahájení turnaje a seznámení se s detaily</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pravidla a požadavky -->
+            <section>
+                <h2>📋 Pravidla a požadavky</h2>
+                <h3>⚡ Vytváření seznamů armád</h3>
+                <ul class="rules-list">
+                    <li>Všechny seznamy armád musí být vytvořeny v souladu s oficialním WTC rules packem 2025</li>
+                    <li>Seznamy musí být zaslány organizátorům nejpozději týden před začátkem turnaje</li>
+                    <li>Povinný je detailní zápis složení vaší armády</li>
+                </ul>
+
+                <h3>⚠️ Důležitá připomenutí</h3>
+                <div class="warning">
+                    Ujistěte se, že vaše miniaturní figurky jsou správně namíchané a povolené podle pravidel.
+                    Kvalita výroby a přípravy může ovlivnit výsledky. V případě pochybností se obraťte na organizátory.
+                </div>
+            </section>
+
+            <!-- Ceny a registrace -->
+            <section class="prices-section">
+                <h2>🏆 Ceny a registrace</h2>
+                <h3>👑 Výhry pro vítěze</h3>
+                <div class="highlight">
+                    <strong style="color: #63acf7;">Vítěz turnaje Legion Champion získá:</strong>
+                    <ul class="rules-list">
+                        <li>Exkluzivní trofej Legion Champion</li>
+                        <li>Voucher na nákup miniatur v hodnotě N/A Kč</li>
+                        <li>Kvalifikace na celorepublikové finále</li>
+                    </ul>
+                </div>
+
+                <h3>🎁 Co je zahrnuto?</h3>
+                <ul class="rules-list">
+                    <li>Občerstvení během turnaje</li>
+                    <li>Upomínkové předměty pro všechny účastníky</li>
+                    <li>Možnost účasti v tombole o hodnotné ceny od sponzorů</li>
+                    <li>Limitované edice miniatur</li>
+                </ul>
+
+                <h3>📝 Registrace</h3>
+                <div class="highlight">
+                    <strong style="color: #63acf7;">Kapacita turnaje je omezena na 60 hráčů.</strong>
+                    <p style="margin-top: 10px;">Registrace bude spuštěna dva měsíce před konáním akce a bude probíhat <strong>online</strong>.</p>
+                    <button class="button" onclick="alert('Registrační formulář bude dostupný dva měsíce před turnajem. Kontaktujte legiongt@warhammer.cz pro více informací.')">
+                        ⚔️ Zaregistrovat se
+                    </button>
+                </div>
+            </section>
+
+            <!-- Ubytování -->
+            <section>
+                <h2>🏨 Ubytování pro hosty</h2>
+                <p style="margin-bottom: 20px;">Pro mimoliberecké účastníky doporučujeme následující hotely:</p>
+                <div class="grid">
+                    <div class="card">
+                        <h4>🏰 Hotel Imperial</h4>
+                        <p>Nachází se v blízkosti místa konání.</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;">
+                            Speciální ceny pro účastníky turnaje
+                        </p>
+                    </div>
+                    <div class="card">
+                        <h4>🏠 Penzion U Zeleného stromu</h4>
+                        <p>Blízko místa konání s přátelskou atmosférou.</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;">
+                            Speciální ceny pro účastníky turnaje
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Kontakt -->
+            <section>
+                <h2>📧 Kontaktujte nás</h2>
+                <div class="contact-box">
+                    <p><strong>Email:</strong> <a href="mailto:legiongt@warhammer.cz">legiongt@warhammer.cz</a></p>
+                    <p style="margin-top: 15px;">Pro všechny dotazy nás kontaktujte na uvedené adrese. Jsme zde pro vás 24/7!</p>
+                </div>
+
+                <h3>📱 Sledujte nás na sociálních sítích</h3>
+                <p>Sledujte nás na sociálních sítích pro nejnovější informace, fotky a aktualizace turnaje.</p>
+            </section>
+
+            <!-- Dárkový balíček -->
+            <section>
+                <h2>🎉 Dárkový balíček & Tombola</h2>
+                <div class="highlight">
+                    <p><strong style="color: #63acf7;">Každý účastník obdrží dárkový balíček!</strong></p>
+                    <p style="margin-top: 15px;">Během turnaje proběhne tombola o hodnotné ceny od našich sponzorů včetně limitovaných edicí miniatur.</p>
+                    <p style="margin-top: 15px; font-style: italic; color: #8888aa;">Šance na vítězství se zvyšuje s každou zahravanou hrou!</p>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p><strong>⚔️ LEGION GT – Prestižní Warhammer 40K turnaj v Liberci ⚔️</strong></p>
+            <p>© 2025 Všechna práva vyhrazena</p>
+            <p>Kontakt: legiongt@warhammer.cz</p>
+        </footer>
+    </div>
+</body>
+</html>
